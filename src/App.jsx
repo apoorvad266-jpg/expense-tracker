@@ -1,6 +1,15 @@
 import { useState, useEffect } from "react";
 import "./App.css";
 
+import {
+  PieChart,
+  Pie,
+  Cell,
+  Tooltip,
+  Legend,
+  ResponsiveContainer,
+} from "recharts";
+
 function App() {
   const [expenses, setExpenses] = useState(() => {
     const saved = localStorage.getItem("expenses");
@@ -17,9 +26,7 @@ function App() {
   }, [expenses]);
 
   const addExpense = () => {
-    if (!title || !amount || !category || !date) {
-      return;
-    }
+    if (!title || !amount || !category || !date) return;
 
     const newExpense = {
       id: Date.now(),
@@ -38,9 +45,7 @@ function App() {
   };
 
   const deleteExpense = (id) => {
-    setExpenses(
-      expenses.filter((expense) => expense.id !== id)
-    );
+    setExpenses(expenses.filter((expense) => expense.id !== id));
   };
 
   const total = expenses.reduce(
@@ -49,6 +54,19 @@ function App() {
   );
 
   const totalRecords = expenses.length;
+
+  const chartData = [
+    {
+      name: "Expenses",
+      value: total,
+    },
+    {
+      name: "Remaining",
+      value: Math.max(10000 - total, 0),
+    },
+  ];
+
+  const COLORS = ["#2e7d32", "#c8e6c9"];
 
   return (
     <div className="container">
@@ -94,7 +112,6 @@ function App() {
 
       </div>
 
-
       <div className="dashboard">
 
         <div className="card">
@@ -109,16 +126,56 @@ function App() {
 
       </div>
 
+      <div className="chart-box">
 
-      {expenses.map((expense) => (
+        <h2>Expense Chart</h2>
+
+        <ResponsiveContainer
+          width="100%"
+          height={300}
+        >
+          <PieChart>
+
+            <Pie
+              data={chartData}
+              dataKey="value"
+              outerRadius={100}
+              label
+            >
+              {chartData.map((entry, index) => (
+                <Cell
+                  key={index}
+                  fill={COLORS[index]}
+                />
+              ))}
+            </Pie>
+
+            <Tooltip />
+            <Legend />
+
+          </PieChart>
+
+        </ResponsiveContainer>
+
+      </div> 
+            {expenses.map((expense) => (
 
         <div className="expense" key={expense.id}>
 
           <div>
             <h3>{expense.title}</h3>
-            <p>Amount: ₹{expense.amount}</p>
-            <p>Category: {expense.category}</p>
-            <p>Date: {expense.date}</p>
+
+            <p>
+              Amount: ₹{expense.amount}
+            </p>
+
+            <p>
+              Category: {expense.category}
+            </p>
+
+            <p>
+              Date: {expense.date}
+            </p>
           </div>
 
 
