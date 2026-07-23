@@ -21,6 +21,11 @@ function App() {
     return saved ? JSON.parse(saved) : [];
   });
 
+  const [income, setIncome] = useState(() => {
+    const saved = localStorage.getItem("income");
+    return saved ? saved : "";
+  });
+
   const [title, setTitle] = useState("");
   const [amount, setAmount] = useState("");
   const [category, setCategory] = useState("");
@@ -33,6 +38,10 @@ function App() {
   useEffect(() => {
     localStorage.setItem("darkMode", JSON.stringify(darkMode));
   }, [darkMode]);
+
+  useEffect(() => {
+    localStorage.setItem("income", income);
+  }, [income]);
 
   const addExpense = () => {
     if (!title || !amount || !category || !date) return;
@@ -65,14 +74,8 @@ function App() {
   const totalRecords = expenses.length;
 
   const chartData = [
-    {
-      name: "Expenses",
-      value: total,
-    },
-    {
-      name: "Remaining",
-      value: Math.max(10000 - total, 0),
-    },
+    { name: "Expenses", value: total },
+    { name: "Remaining", value: Math.max(10000 - total, 0) },
   ];
 
   const COLORS = ["#2e7d32", "#c8e6c9"];
@@ -92,6 +95,13 @@ function App() {
       <div className="box">
 
         <input
+          type="number"
+          placeholder="Enter Income"
+          value={income}
+          onChange={(e) => setIncome(e.target.value)}
+        />
+
+        <input
           placeholder="Expense Name"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
@@ -103,7 +113,6 @@ function App() {
           value={amount}
           onChange={(e) => setAmount(e.target.value)}
         />
-
         <select
           value={category}
           onChange={(e) => setCategory(e.target.value)}
@@ -126,7 +135,13 @@ function App() {
         </button>
 
       </div>
+
       <div className="dashboard">
+
+        <div className="card">
+          <h3>Total Income</h3>
+          <p>₹{income || 0}</p>
+        </div>
 
         <div className="card">
           <h3>Total Expense</h3>
@@ -141,15 +156,10 @@ function App() {
       </div>
 
       <div className="chart-box">
-
         <h2>Expense Chart</h2>
 
-        <ResponsiveContainer
-          width="100%"
-          height={300}
-        >
+        <ResponsiveContainer width="100%" height={300}>
           <PieChart>
-
             <Pie
               data={chartData}
               dataKey="value"
@@ -157,44 +167,29 @@ function App() {
               label
             >
               {chartData.map((entry, index) => (
-                <Cell
-                  key={index}
-                  fill={COLORS[index]}
-                />
+                <Cell key={index} fill={COLORS[index]} />
               ))}
             </Pie>
 
             <Tooltip />
             <Legend />
-
           </PieChart>
-
         </ResponsiveContainer>
-
       </div>
 
       {expenses.map((expense) => (
-
         <div className="expense" key={expense.id}>
-
           <div>
             <h3>{expense.title}</h3>
-
             <p>Amount: ₹{expense.amount}</p>
-
             <p>Category: {expense.category}</p>
-
             <p>Date: {expense.date}</p>
           </div>
 
-          <button
-            onClick={() => deleteExpense(expense.id)}
-          >
+          <button onClick={() => deleteExpense(expense.id)}>
             Delete
           </button>
-
         </div>
-
       ))}
 
     </div>
