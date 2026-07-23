@@ -1,13 +1,23 @@
 body {
   margin: 0;
   font-family: Arial, sans-serif;
-  background: #e8f5e9;
+  transition: 0.3s;
 }
 
 .container {
   width: 90%;
   max-width: 900px;
   margin: 30px auto;
+}
+
+.container.light {
+  background: #e8f5e9;
+  min-height: 100vh;
+}
+
+.container.dark {
+  background: #121212;
+  min-height: 100vh;
 }
 
 h1 {
@@ -20,13 +30,33 @@ p {
   color: #555;
 }
 
+.theme-toggle {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 15px;
+}
+
+.theme-toggle button {
+  background: #2e7d32;
+  color: white;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.theme-toggle button:hover {
+  background: #1b5e20;
+}
+
 .box {
   background: white;
   padding: 20px;
   border-radius: 12px;
   display: grid;
   gap: 12px;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
 .box input,
@@ -65,7 +95,6 @@ p {
   border-radius: 10px;
   text-align: center;
 }
-
 .expense {
   display: flex;
   justify-content: space-between;
@@ -74,7 +103,7 @@ p {
   margin-top: 15px;
   padding: 15px;
   border-radius: 10px;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
 .expense h3 {
@@ -104,5 +133,49 @@ p {
   margin-top: 20px;
   padding: 20px;
   border-radius: 10px;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* ---------- DARK MODE ---------- */
+
+.container.dark h1,
+.container.dark h2,
+.container.dark h3,
+.container.dark p {
+  color: white;
+}
+
+.container.dark .box,
+.container.dark .expense,
+.container.dark .chart-box {
+  background: #1e1e1e;
+  color: white;
+}
+
+.container.dark input,
+.container.dark select {
+  background: #2b2b2b;
+  color: white;
+  border: 1px solid #555;
+}
+
+.container.dark input::placeholder {
+  color: #ccc;
+}
+
+.container.dark .card {
+  background: #2e7d32;
+}
+
+.container.dark .expense button {
+  background: #d32f2f;
+}
+
+.container.dark .expense button:hover {
+  background: #b71c1c;
+}
+
+.container.dark .theme-toggle button {
+  background: #66bb6a;
+  color: #121212;
 }

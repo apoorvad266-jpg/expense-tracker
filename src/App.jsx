@@ -11,6 +11,11 @@ import {
 } from "recharts";
 
 function App() {
+  const [darkMode, setDarkMode] = useState(() => {
+    const savedTheme = localStorage.getItem("darkMode");
+    return savedTheme ? JSON.parse(savedTheme) : false;
+  });
+
   const [expenses, setExpenses] = useState(() => {
     const saved = localStorage.getItem("expenses");
     return saved ? JSON.parse(saved) : [];
@@ -24,6 +29,10 @@ function App() {
   useEffect(() => {
     localStorage.setItem("expenses", JSON.stringify(expenses));
   }, [expenses]);
+
+  useEffect(() => {
+    localStorage.setItem("darkMode", JSON.stringify(darkMode));
+  }, [darkMode]);
 
   const addExpense = () => {
     if (!title || !amount || !category || !date) return;
@@ -69,7 +78,13 @@ function App() {
   const COLORS = ["#2e7d32", "#c8e6c9"];
 
   return (
-    <div className="container">
+    <div className={`container ${darkMode ? "dark" : "light"}`}>
+
+      <div className="theme-toggle">
+        <button onClick={() => setDarkMode(!darkMode)}>
+          {darkMode ? "☀️ Light Mode" : "🌙 Dark Mode"}
+        </button>
+      </div>
 
       <h1>💰 Expense Tracker</h1>
       <p>Track your daily expenses easily</p>
@@ -111,7 +126,6 @@ function App() {
         </button>
 
       </div>
-
       <div className="dashboard">
 
         <div className="card">
@@ -157,27 +171,21 @@ function App() {
 
         </ResponsiveContainer>
 
-      </div> 
-            {expenses.map((expense) => (
+      </div>
+
+      {expenses.map((expense) => (
 
         <div className="expense" key={expense.id}>
 
           <div>
             <h3>{expense.title}</h3>
 
-            <p>
-              Amount: ₹{expense.amount}
-            </p>
+            <p>Amount: ₹{expense.amount}</p>
 
-            <p>
-              Category: {expense.category}
-            </p>
+            <p>Category: {expense.category}</p>
 
-            <p>
-              Date: {expense.date}
-            </p>
+            <p>Date: {expense.date}</p>
           </div>
-
 
           <button
             onClick={() => deleteExpense(expense.id)}
