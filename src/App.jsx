@@ -1,255 +1,924 @@
 import { useState, useEffect } from "react";
 import "./App.css";
 
+import Login from "./Login";
+import Signup from "./Signup";
+
+import { Pie } from "react-chartjs-2";
+
 import {
-  PieChart,
-  Pie,
-  Cell,
+  Chart as ChartJS,
+  ArcElement,
   Tooltip,
-  Legend,
-  ResponsiveContainer,
-} from "recharts";
+  Legend
+} from "chart.js";
+
+
+ChartJS.register(
+  ArcElement,
+  Tooltip,
+  Legend
+);
+
+
 
 function App() {
-  const [darkMode, setDarkMode] = useState(() => {
-    const savedTheme = localStorage.getItem("darkMode");
-    return savedTheme ? JSON.parse(savedTheme) : false;
-  });
 
-  const [expenses, setExpenses] = useState(() => {
-    const saved = localStorage.getItem("expenses");
-    return saved ? JSON.parse(saved) : [];
-  });
 
-  const [search, setSearch] = useState("");
+const [login, setLogin] = useState(
+  localStorage.getItem("login") === "true"
+);
 
-  const [income, setIncome] = useState(() => {
-    return localStorage.getItem("income") || 0;
-  });
 
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
-  const [account, setAccount] = useState("");
-  const [amount, setAmount] = useState("");
-  const [category, setCategory] = useState("");
-  const [date, setDate] = useState("");
+const [showSignup, setShowSignup] = useState(false);
 
-  useEffect(() => {
-    localStorage.setItem("expenses", JSON.stringify(expenses));
-  }, [expenses]);
 
-  useEffect(() => {
-    localStorage.setItem("darkMode", JSON.stringify(darkMode));
-  }, [darkMode]);
 
-  useEffect(() => {
-    localStorage.setItem("income", income);
-  }, [income]);
+const [darkMode,setDarkMode] = useState(false);
 
-  useEffect(() => {
-    document.body.className = darkMode ? "dark" : "light";
-  }, [darkMode]);
 
-  const addExpense = () => {
-    if (!title || !amount || !category || !date) return;
 
-    const newExpense = {
-      id: Date.now(),
-      title,
-      description,
-      account,
-      amount: Number(amount),
-      category,
-      date,
-    };
+const [income,setIncome] = useState("");
 
-    setExpenses([...expenses, newExpense]);
 
-    setTitle("");
-    setDescription("");
-    setAccount("");
-    setAmount("");
-    setCategory("");
-    setDate("");
-  };
 
-  const deleteExpense = (id) => {
-    setExpenses(expenses.filter((expense) => expense.id !== id));
-  };
+const [expenseName,setExpenseName] = useState("");
 
-  const total = expenses.reduce(
-    (sum, expense) => sum + expense.amount,
-    0
-  );
+const [expenseAmount,setExpenseAmount] = useState("");
 
-  const balance = Number(income || 0) - total;
-  const totalRecords = expenses.length;
+const [category,setCategory] = useState("Food");
 
-  const chartData = [
-    { name: "Expenses", value: total },
-    {
-      name: "Remaining",
-      value: Math.max(Number(income) - total, 0),
-    },
-  ];
+const [date,setDate] = useState("");
 
-  const COLORS = [
-  "#8b5cf6",
-  "#c084fc"
-];
 
-  const filteredExpenses = expenses.filter((expense) =>
-    expense.title.toLowerCase().includes(search.toLowerCase())
-  );
 
-  return (
-    <div className={`container ${darkMode ? "dark" : "light"}`}>
-          <div className="theme-toggle">
-        <button onClick={() => setDarkMode(!darkMode)}>
-          {darkMode ? "☀️ Light Mode" : "🌙 Dark Mode"}
-        </button>
-      </div>
+const [search,setSearch] = useState("");
 
-      <h1>💰 Expense Tracker</h1>
-      <p>Track your daily expenses easily</p>
 
-      <div className="box">
-        <input
-          type="number"
-          placeholder="Enter Income"
-          value={income}
-          onChange={(e) => setIncome(e.target.value)}
-        />
 
-        <input
-          placeholder="Expense Name"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-        />
 
-        <input
-          placeholder="Description"
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-        />
+const [transactions,setTransactions] = useState(()=>{
 
-        <select
-          value={account}
-          onChange={(e) => setAccount(e.target.value)}
-        >
-          <option value="">Select Account</option>
-          <option value="Cash">Cash</option>
-          <option value="Bank">Bank</option>
-          <option value="UPI">UPI</option>
-        </select>
+const saved = localStorage.getItem("transactions");
 
-        <input
-          type="number"
-          placeholder="Amount"
-          value={amount}
-          onChange={(e) => setAmount(e.target.value)}
-        />
+return saved ? JSON.parse(saved) : [];
 
-        <select
-          value={category}
-          onChange={(e) => setCategory(e.target.value)}
-        >
-          <option value="">Select Category</option>
-          <option value="Food">Food</option>
-          <option value="Travel">Travel</option>
-          <option value="Shopping">Shopping</option>
-          <option value="Bills">Bills</option>
-        </select>
+});
 
-        <input
-          type="date"
-          value={date}
-          onChange={(e) => setDate(e.target.value)}
-        />
 
-        <button onClick={addExpense}>Add Expense</button>
-      </div>
 
-      <div className="dashboard">
-        <div className="card">
-          <h3>Total Income</h3>
-          <p>₹{income || 0}</p>
-        </div>
 
-        <div className="card">
-          <h3>Total Expense</h3>
-          <p>₹{total}</p>
-        </div>
+useEffect(()=>{
 
-        <div className="card">
-          <h3>Total Records</h3>
-          <p>{totalRecords}</p>
-        </div>
+localStorage.setItem(
+"transactions",
+JSON.stringify(transactions)
+);
 
-        <div className="card">
-          <h3>Total Balance</h3>
-          <p>₹{balance}</p>
-        </div>
-      </div>
-            <div className="chart-box">
-        <h2>Expense Chart</h2>
+},[transactions]);
 
-        <input
-          className="search"
-          type="text"
-          placeholder="Search Transaction..."
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-        />
 
-        <ResponsiveContainer width="100%" height={300}>
-          <PieChart>
-            <Pie
-              data={chartData}
-              dataKey="value"
-              outerRadius={100}
-              label
-            >
-              {chartData.map((entry, index) => (
-                <Cell key={index} fill={COLORS[index]} />
-              ))}
-            </Pie>
 
-            <Tooltip />
-            <Legend />
-          </PieChart>
-        </ResponsiveContainer>
-      </div>
 
-      {filteredExpenses.length === 0 ? (
-        <p style={{ textAlign: "center" }}>No transactions found.</p>
-      ) : (
-        filteredExpenses.map((expense) => (
-          <div className="expense" key={expense.id}>
-            <div>
-              <h3>{expense.title}</h3>
 
-              {expense.description && (
-                <p>Description: {expense.description}</p>
-              )}
+if(!login){
 
-              {expense.account && (
-                <p>Account: {expense.account}</p>
-              )}
+return showSignup ? (
 
-              <p>Amount: ₹{expense.amount}</p>
-              <p>Category: {expense.category}</p>
-              <p>Date: {expense.date}</p>
-            </div>
+<Signup
+goToLogin={()=>setShowSignup(false)}
+/>
 
-            <button onClick={() => deleteExpense(expense.id)}>
-              Delete
-            </button>
-          </div>
-        ))
-      )}
-    </div>
-  );
+)
+
+:
+
+(
+
+<Login
+
+setLogin={setLogin}
+
+goToSignup={()=>setShowSignup(true)}
+
+/>
+
+);
+
 }
+// ADD INCOME
+
+const addIncome = () => {
+
+
+if(!income){
+
+alert("Enter income");
+
+return;
+
+}
+
+
+
+const newIncome = {
+
+id: Date.now(),
+
+type:"Income",
+
+name:"Income Added",
+
+amount:Number(income),
+
+category:"Income",
+
+date:new Date().toLocaleDateString()
+
+};
+
+
+
+setTransactions([
+
+...transactions,
+
+newIncome
+
+]);
+
+
+
+setIncome("");
+
+};
+
+
+
+
+
+
+// ADD EXPENSE
+
+
+const addExpense = () => {
+
+
+
+if(!expenseName || !expenseAmount){
+
+alert("Fill expense details");
+
+return;
+
+}
+
+
+
+
+const newExpense = {
+
+
+id:Date.now(),
+
+type:"Expense",
+
+name:expenseName,
+
+amount:Number(expenseAmount),
+
+category:category,
+
+date:date
+
+
+};
+
+
+
+
+setTransactions([
+
+...transactions,
+
+newExpense
+
+]);
+
+
+
+setExpenseName("");
+
+setExpenseAmount("");
+
+setDate("");
+
+
+};
+
+
+
+
+
+
+
+// DELETE TRANSACTION
+
+
+const deleteTransaction = (id)=>{
+
+
+const updatedTransactions = transactions.filter(
+
+(item)=>item.id !== id
+
+);
+
+
+
+setTransactions(updatedTransactions);
+
+
+};
+
+
+
+
+
+
+
+// TOTAL INCOME
+
+
+const totalIncome = transactions
+
+.filter(
+
+item=>item.type==="Income"
+
+)
+
+.reduce(
+
+(sum,item)=>sum+item.amount,
+
+0
+
+);
+
+
+
+
+
+
+
+// TOTAL EXPENSE
+
+
+const totalExpense = transactions
+
+.filter(
+
+item=>item.type==="Expense"
+
+)
+
+.reduce(
+
+(sum,item)=>sum+item.amount,
+
+0
+
+);
+
+
+
+
+
+
+
+// BALANCE
+
+
+const balance = totalIncome - totalExpense;
+
+
+
+
+
+
+
+// SEARCH
+
+
+const filteredTransactions = transactions.filter((item)=>{
+
+
+return (
+
+item.name
+
+.toLowerCase()
+
+.includes(search.toLowerCase())
+
+||
+
+item.category
+
+.toLowerCase()
+
+.includes(search.toLowerCase())
+
+);
+
+
+});
+
+
+
+
+
+
+
+// PIE CHART DATA
+
+
+const chartData = {
+
+
+labels:[
+
+"Income",
+
+"Expense"
+
+],
+
+
+
+datasets:[
+
+{
+
+data:[
+
+totalIncome,
+
+totalExpense
+
+],
+
+
+backgroundColor:[
+
+"#4caf50",
+
+"#f15bb5"
+
+],
+
+
+borderWidth:1
+
+
+}
+
+]
+
+
+};
+return (
+
+<div className={darkMode ? "app dark" : "app"}>
+
+
+
+<div className="header">
+
+
+<h1>
+💰 Expense Tracker
+</h1>
+
+
+
+<div className="header-buttons">
+
+
+<button onClick={()=>setDarkMode(!darkMode)}>
+
+{
+
+darkMode
+
+?
+
+"☀️ Light"
+
+:
+
+"🌙 Dark"
+
+}
+
+</button>
+
+
+
+
+<button
+
+onClick={()=>{
+
+localStorage.removeItem("login");
+
+setLogin(false);
+
+}}
+
+>
+
+Logout
+
+</button>
+
+
+</div>
+
+
+</div>
+
+
+
+
+
+
+
+<div className="cards">
+
+
+
+<div className="card">
+
+<h3>
+Total Income
+</h3>
+
+
+<p>
+₹ {totalIncome}
+</p>
+
+
+</div>
+
+
+
+
+
+
+<div className="card">
+
+<h3>
+Total Expense
+</h3>
+
+
+<p>
+₹ {totalExpense}
+</p>
+
+
+</div>
+
+
+
+
+
+
+
+<div className="card">
+
+<h3>
+Balance
+</h3>
+
+
+<p>
+₹ {balance}
+</p>
+
+
+</div>
+
+
+</div>
+
+
+
+
+
+
+
+
+
+<div className="box">
+
+
+<h2>
+Add Income
+</h2>
+
+
+
+
+<div className="income-row">
+
+
+<input
+
+type="number"
+
+placeholder="Enter Income"
+
+value={income}
+
+onChange={(e)=>setIncome(e.target.value)}
+
+/>
+
+
+
+
+
+<button onClick={addIncome}>
+
+Add Income
+
+</button>
+
+
+</div>
+
+
+</div>
+
+
+
+
+
+
+
+
+
+<div className="box">
+
+
+<h2>
+Add Expense
+</h2>
+
+
+
+
+<div className="expense-form-row">
+
+
+<input
+
+type="text"
+
+placeholder="Expense Name"
+
+value={expenseName}
+
+onChange={(e)=>setExpenseName(e.target.value)}
+
+/>
+
+
+
+
+
+
+<input
+
+type="number"
+
+placeholder="Amount"
+
+value={expenseAmount}
+
+onChange={(e)=>setExpenseAmount(e.target.value)}
+
+/>
+
+
+
+
+
+
+<select
+
+value={category}
+
+onChange={(e)=>setCategory(e.target.value)}
+
+>
+
+
+<option>
+Food
+</option>
+
+
+<option>
+Travel
+</option>
+
+
+<option>
+Shopping
+</option>
+
+
+<option>
+Other
+</option>
+
+
+</select>
+
+
+
+
+
+
+<input
+
+type="date"
+
+value={date}
+
+onChange={(e)=>setDate(e.target.value)}
+
+/>
+
+
+
+</div>
+
+
+
+
+
+<button onClick={addExpense}>
+
+Add Expense
+
+</button>
+
+
+
+</div>
+
+
+
+
+
+
+
+
+
+<div className="chart-section">
+
+
+<h2>
+Income / Expense Chart
+</h2>
+
+
+
+<div className="pie-container">
+
+
+<Pie
+
+data={chartData}
+
+options={{
+
+responsive:true,
+
+maintainAspectRatio:false,
+
+plugins:{
+
+legend:{
+
+position:"bottom"
+
+}
+
+}
+
+}}
+
+/>
+
+
+</div>
+
+
+</div>
+{/* TRANSACTION HISTORY */}
+
+
+<div className="transaction-section">
+
+
+<h2>
+Transaction History
+</h2>
+
+
+
+
+<input
+
+className="search-box"
+
+type="text"
+
+placeholder="🔍 Search Transaction"
+
+value={search}
+
+onChange={(e)=>setSearch(e.target.value)}
+
+/>
+
+
+
+
+
+
+<div className="transaction-list">
+
+
+
+{
+
+filteredTransactions.length === 0 ? (
+
+<p>
+No Transaction Found
+</p>
+
+)
+
+:
+
+(
+
+filteredTransactions.map((item)=>(
+
+
+<div
+
+className="transaction-item"
+
+key={item.id}
+
+>
+
+
+<div>
+
+
+<h3>
+
+{item.name}
+
+</h3>
+
+
+
+
+<p>
+
+{item.category} | {item.date}
+
+</p>
+
+
+</div>
+
+
+
+
+
+
+
+
+<div className="transaction-right">
+
+
+
+<span
+
+className={
+
+item.type === "Income"
+
+?
+
+"income-text"
+
+:
+
+"expense-text"
+
+}
+
+>
+
+
+{
+
+item.type === "Income"
+
+?
+
+"+"
+
+:
+
+"-"
+
+}
+
+
+₹ {item.amount}
+
+
+</span>
+
+
+
+
+
+
+
+<button
+
+className="delete-btn"
+
+onClick={()=>deleteTransaction(item.id)}
+
+>
+
+
+🗑 Delete
+
+
+</button>
+
+
+
+</div>
+
+
+
+</div>
+
+
+))
+
+
+)
+
+}
+
+
+
+</div>
+
+
+
+</div>
+
+
+
+
+
+
+</div>
+
+);
+
+}
+
 
 export default App;
