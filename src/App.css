@@ -41,9 +41,11 @@ body{
 
 .header{
 
-  text-align:center;
+  display:flex;
 
-  position:relative;
+  justify-content:space-between;
+
+  align-items:center;
 
   margin-bottom:30px;
 
@@ -61,16 +63,21 @@ body{
 
 
 
-.header button{
+.header-buttons{
 
-  position:absolute;
+  display:flex;
 
-  right:0;
-
-  top:0;
+  gap:12px;
 
 }
 
+
+
+.header-buttons button{
+
+  position:static;
+
+}
 
 
 
@@ -106,14 +113,7 @@ button:hover{
 
   transform:scale(1.05);
 
-}
-
-
-
-
-
-
-/* CARDS */
+}/* CARDS */
 
 .cards{
 
@@ -169,8 +169,6 @@ button:hover{
 
 
 
-
-
 /* BOX */
 
 .box{
@@ -196,8 +194,6 @@ button:hover{
   color:#9b5de5;
 
 }
-
-
 
 
 
@@ -241,8 +237,6 @@ select{
   flex:1;
 
 }
-
-
 
 
 
@@ -379,7 +373,6 @@ select{
 
 
 
-
 /* TRANSACTION HISTORY */
 
 .transaction-section{
@@ -419,7 +412,6 @@ select{
   margin-bottom:20px;
 
 }
-
 
 
 
@@ -465,7 +457,6 @@ select{
 
 
 
-
 .transaction-right{
 
   display:flex;
@@ -475,8 +466,6 @@ select{
   gap:12px;
 
 }
-
-
 
 
 
@@ -506,8 +495,6 @@ select{
 
 
 
-
-
 /* DELETE BUTTON */
 
 .delete-btn{
@@ -529,13 +516,6 @@ select{
   background:#d90429;
 
 }
-
-
-
-
-
-
-
 /* DARK MODE */
 
 
@@ -551,9 +531,35 @@ select{
 
 
 
+.app.dark .card h3,
+.app.dark .box h2,
+.app.dark .transaction-section h2{
+
+  color:#d8b4fe;
+
+}
+
+
+
+.app.dark .card p{
+
+  color:white;
+
+}
+
+
+
 .app.dark .transaction-item{
 
   background:#3a2550;
+
+}
+
+
+
+.app.dark .transaction-item h3{
+
+  color:#d8b4fe;
 
 }
 
@@ -566,9 +572,17 @@ select{
 
   color:white;
 
+  border:1px solid #777;
+
 }
 
 
+
+.app.dark input::placeholder{
+
+  color:#ddd;
+
+}
 
 
 
@@ -582,7 +596,7 @@ select{
 
 .cards{
 
-grid-template-columns:1fr;
+  grid-template-columns:1fr;
 
 }
 
@@ -590,7 +604,7 @@ grid-template-columns:1fr;
 
 .expense-form-row{
 
-grid-template-columns:1fr;
+  grid-template-columns:1fr;
 
 }
 
@@ -598,17 +612,35 @@ grid-template-columns:1fr;
 
 .income-row{
 
-flex-direction:column;
+  flex-direction:column;
 
 }
 
 
 
-.header button{
+.header{
 
-position:static;
+  flex-direction:column;
 
-margin-top:15px;
+  gap:15px;
+
+}
+
+
+
+.header h1{
+
+  font-size:30px;
+
+}
+
+
+
+.header-buttons{
+
+  width:100%;
+
+  justify-content:center;
 
 }
 
@@ -616,11 +648,11 @@ margin-top:15px;
 
 .transaction-item{
 
-flex-direction:column;
+  flex-direction:column;
 
-align-items:flex-start;
+  align-items:flex-start;
 
-gap:10px;
+  gap:10px;
 
 }
 
@@ -628,9 +660,9 @@ gap:10px;
 
 .transaction-right{
 
-width:100%;
+  width:100%;
 
-justify-content:space-between;
+  justify-content:space-between;
 
 }
 
@@ -638,9 +670,9 @@ justify-content:space-between;
 
 .pie-container{
 
-width:200px;
+  width:200px;
 
-height:200px;
+  height:200px;
 
 }
 
@@ -648,9 +680,9 @@ height:200px;
 
 .pie-container canvas{
 
-width:200px !important;
+  width:200px !important;
 
-height:200px !important;
+  height:200px !important;
 
 }
 
