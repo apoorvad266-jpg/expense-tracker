@@ -19,7 +19,6 @@ function Login({ setLogin, goToSignup }) {
     );
 
 
-
     if (
       user &&
       user.email === email &&
@@ -50,9 +49,7 @@ function Login({ setLogin, goToSignup }) {
 
 
 
-
   return (
-
 
     <div className="login-container">
 
@@ -60,18 +57,14 @@ function Login({ setLogin, goToSignup }) {
       <div className="login-box">
 
 
-
         <div className="logo">
           💰
         </div>
 
 
-
         <h2>
           Expense Tracker
         </h2>
-
-
 
 
         <input
@@ -85,8 +78,6 @@ function Login({ setLogin, goToSignup }) {
           onChange={(e)=>setEmail(e.target.value)}
 
         />
-
-
 
 
 
@@ -104,8 +95,6 @@ function Login({ setLogin, goToSignup }) {
 
 
 
-
-
         <button onClick={loginUser}>
 
           Login
@@ -114,15 +103,9 @@ function Login({ setLogin, goToSignup }) {
 
 
 
-
-
         <p>
-
-          Do you have an account?
-
+          Don't have an account?
         </p>
-
-
 
 
 
@@ -140,12 +123,10 @@ function Login({ setLogin, goToSignup }) {
 
 
 
-
       </div>
 
 
     </div>
-
 
   );
 
