@@ -1,6 +1,9 @@
 import { useState } from "react";
 import "./Login.css";
 
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { auth } from "./firebase";
+
 
 function Login({ setLogin, goToSignup }) {
 
@@ -11,19 +14,17 @@ function Login({ setLogin, goToSignup }) {
 
 
 
-  const loginUser = () => {
+  const loginUser = async () => {
 
 
-    const user = JSON.parse(
-      localStorage.getItem("user")
-    );
+    try {
 
 
-    if (
-      user &&
-      user.email === email &&
-      user.password === password
-    ) {
+      await signInWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
 
 
       localStorage.setItem(
@@ -35,8 +36,9 @@ function Login({ setLogin, goToSignup }) {
       setLogin(true);
 
 
+
     } 
-    else {
+    catch(error) {
 
 
       alert("Invalid Email or Password");
@@ -49,7 +51,9 @@ function Login({ setLogin, goToSignup }) {
 
 
 
+
   return (
+
 
     <div className="login-container">
 
@@ -57,14 +61,23 @@ function Login({ setLogin, goToSignup }) {
       <div className="login-box">
 
 
+
         <div className="logo">
+
           💰
+
         </div>
 
 
+
         <h2>
+
           Expense Tracker
+
         </h2>
+
+
+
 
 
         <input
@@ -78,6 +91,9 @@ function Login({ setLogin, goToSignup }) {
           onChange={(e)=>setEmail(e.target.value)}
 
         />
+
+
+
 
 
 
@@ -95,6 +111,9 @@ function Login({ setLogin, goToSignup }) {
 
 
 
+
+
+
         <button onClick={loginUser}>
 
           Login
@@ -103,9 +122,16 @@ function Login({ setLogin, goToSignup }) {
 
 
 
+
+
+
         <p>
+
           Don't have an account?
+
         </p>
+
+
 
 
 
@@ -123,14 +149,17 @@ function Login({ setLogin, goToSignup }) {
 
 
 
+
       </div>
 
 
     </div>
 
+
   );
 
 }
+
 
 
 export default Login;

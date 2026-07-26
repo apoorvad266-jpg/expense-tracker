@@ -1,6 +1,9 @@
 import { useState } from "react";
 import "./Signup.css";
 
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { auth } from "./firebase";
+
 
 function Signup({ goToLogin }) {
 
@@ -13,39 +16,35 @@ function Signup({ goToLogin }) {
 
 
 
-  const handleSignup = (e) => {
+  const handleSignup = async (e) => {
 
     e.preventDefault();
 
 
-
-    const user = {
-
-      name,
-
-      email,
-
-      password
-
-    };
+    try {
 
 
-
-    localStorage.setItem(
-
-      "user",
-
-      JSON.stringify(user)
-
-    );
+      await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
 
 
-
-    alert("Account Created Successfully!");
-
+      alert("Account Created Successfully!");
 
 
-    goToLogin();
+      goToLogin();
+
+
+    } 
+    catch(error) {
+
+
+      alert(error.message);
+
+
+    }
 
 
   };
@@ -84,7 +83,6 @@ function Signup({ goToLogin }) {
           Start managing your money 💜
 
         </p>
-
 
 
 
@@ -167,6 +165,7 @@ function Signup({ goToLogin }) {
 
 
 
+
         <span
 
           className="link"
@@ -178,6 +177,7 @@ function Signup({ goToLogin }) {
           Login
 
         </span>
+
 
 
 

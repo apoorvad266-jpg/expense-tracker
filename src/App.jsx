@@ -56,7 +56,6 @@ const [search,setSearch] = useState("");
 
 
 
-
 const [transactions,setTransactions] = useState(()=>{
 
 const saved = localStorage.getItem("transactions");
@@ -64,7 +63,6 @@ const saved = localStorage.getItem("transactions");
 return saved ? JSON.parse(saved) : [];
 
 });
-
 
 
 
@@ -76,8 +74,6 @@ JSON.stringify(transactions)
 );
 
 },[transactions]);
-
-
 
 
 
@@ -193,6 +189,7 @@ date:date
 
 
 };
+
 
 
 
@@ -334,13 +331,6 @@ item.category
 
 
 });
-
-
-
-
-
-
-
 // PIE CHART DATA
 
 
@@ -388,6 +378,9 @@ borderWidth:1
 
 
 };
+
+
+
 return (
 
 <div className={darkMode ? "app dark" : "app"}>
@@ -427,6 +420,7 @@ darkMode
 
 
 
+
 <button
 
 onClick={()=>{
@@ -448,7 +442,6 @@ Logout
 
 
 </div>
-
 
 
 
@@ -521,8 +514,6 @@ Balance
 
 
 
-
-
 <div className="box">
 
 
@@ -563,15 +554,6 @@ Add Income
 
 
 </div>
-
-
-
-
-
-
-
-
-
 <div className="box">
 
 
@@ -619,6 +601,7 @@ onChange={(e)=>setExpenseAmount(e.target.value)}
 
 
 
+
 <select
 
 value={category}
@@ -655,6 +638,7 @@ Other
 
 
 
+
 <input
 
 type="date"
@@ -668,6 +652,7 @@ onChange={(e)=>setDate(e.target.value)}
 
 
 </div>
+
 
 
 
@@ -700,6 +685,7 @@ Income / Expense Chart
 
 
 
+
 <div className="pie-container">
 
 
@@ -728,11 +714,12 @@ position:"bottom"
 />
 
 
+
 </div>
 
 
 </div>
-{/* TRANSACTION HISTORY */}
+/* TRANSACTION HISTORY */
 
 
 <div className="transaction-section">
@@ -741,6 +728,7 @@ position:"bottom"
 <h2>
 Transaction History
 </h2>
+
 
 
 
@@ -758,6 +746,7 @@ value={search}
 onChange={(e)=>setSearch(e.target.value)}
 
 />
+
 
 
 
@@ -794,6 +783,7 @@ key={item.id}
 >
 
 
+
 <div>
 
 
@@ -814,7 +804,6 @@ key={item.id}
 
 
 </div>
-
 
 
 
@@ -845,6 +834,7 @@ item.type === "Income"
 >
 
 
+
 {
 
 item.type === "Income"
@@ -871,6 +861,7 @@ item.type === "Income"
 
 
 
+
 <button
 
 className="delete-btn"
@@ -887,7 +878,9 @@ onClick={()=>deleteTransaction(item.id)}
 
 
 
+
 </div>
+
 
 
 
