@@ -360,13 +360,15 @@ totalExpense
 ],
 
 
-backgroundColor:[
-
-"#4caf50",
-
-"#f15bb5"
-
+backgroundColor: [
+  "#2563EB",
+  "#DC2626"
 ],
+borderColor: [
+  "#FFFFFF",
+  "#FFFFFF"
+],
+borderWidth: 3,
 
 
 borderWidth:1
