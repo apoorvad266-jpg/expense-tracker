@@ -80,7 +80,7 @@ function Signup({ goToLogin }) {
 
         <p className="tagline">
 
-          Start managing your money 💜
+          Start managing your money 
 
         </p>
 
